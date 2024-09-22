@@ -1,56 +1,18 @@
-import { useRef } from "react";
 import styles from "./Blocks.module.css";
+import { Block } from "./Block";
 
-export function Blocks() {
-  const ref = useRef<HTMLDivElement>(null);
-  function onDragOver(e: React.DragEvent) {
-    e.preventDefault();
-    console.log("on drag over");
-    if (ref.current) {
-      const a = ref.current.getClientRects();
-      console.log("client rect", a);
-    }
-  }
+type Props = {
+  freeX: number;
+  freeY: number;
+};
 
-  function onDrop(e: React.DragEvent) {
-    console.log("on drop", e);
-    if (ref.current) {
-      const a = ref.current.getClientRects();
-      console.log("client rect", a);
-    }
-  }
-
+export function Blocks(props: Props) {
   return (
-    <div className={styles.component} onDragOver={onDragOver} onDrop={onDrop}>
+    <div className={styles.component}>
       <div className={styles.grid}>
-        <div ref={ref} className={styles.block}>
-          <span className={styles.number}>1</span>
-          <span className={styles.distance}>1.5478</span>
-        </div>
-        <div className={styles.block}>
-          <span className={styles.number}>2</span>
-        </div>
-        <div className={styles.block}>
-          <span className={styles.number}>3</span>
-        </div>
-        <div className={styles.block}>
-          <span className={styles.number}>4</span>
-        </div>
-        <div className={styles.block}>
-          <span className={styles.number}>5</span>
-        </div>
-        <div className={styles.block}>
-          <span className={styles.number}>6</span>
-        </div>
-        <div className={styles.block}>
-          <span className={styles.number}>7</span>
-        </div>
-        <div className={styles.block}>
-          <span className={styles.number}>8</span>
-        </div>
-        <div className={styles.block}>
-          <span className={styles.number}>9</span>
-        </div>
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
+          <Block key={n} number={n} freeX={props.freeX} freeY={props.freeY} />
+        ))}
       </div>
     </div>
   );

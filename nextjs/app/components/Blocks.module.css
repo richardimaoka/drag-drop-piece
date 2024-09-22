@@ -7,32 +7,3 @@
   grid-template-columns: 150px 150px 150px;
   grid-template-rows: 150px 150px 150px;
 }
-
-.block {
-  display: grid;
-  grid-template-columns: auto;
-  grid-template-rows: 1rem auto 1rem;
-  grid-template-areas:
-    "."
-    "number"
-    "distance";
-
-  align-content: center;
-  align-items: center;
-  justify-content: center;
-  justify-items: center;
-
-  border: 1px solid rgb(216, 216, 216);
-}
-
-.number {
-  grid-area: number;
-  font-size: 40px;
-  color: rgb(126, 126, 126);
-}
-
-.distance {
-  grid-area: distance;
-  font-size: 0.8rem;
-  color: rgb(126, 126, 126);
-}

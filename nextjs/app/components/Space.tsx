@@ -46,7 +46,7 @@ export function Space() {
 
   return (
     <div className={styles.component}>
-      <Blocks />
+      <Blocks freeX={pos.x} freeY={pos.y} />
       <div
         draggable
         className={styles.free}
