@@ -1,0 +1,15 @@
+.component {
+  display: grid;
+  grid-template-columns: 150px 150px 150px;
+  grid-template-rows: 150px 150px 150px;
+}
+
+.block {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+
+  font-size: 40px;
+  color: rgb(126, 126, 126);
+  border: 1px solid rgb(216, 216, 216);
+}
