@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import styles from "./Block.module.css";
 
 type Props = {
@@ -9,8 +9,12 @@ type Props = {
 
 export function Block(props: Props) {
   const ref = useRef<HTMLDivElement>(null);
+  const [distance, setDistance] = useState<string | undefined>(undefined);
 
-  function calcDistance() {
+  function onDragOver(e: React.DragEvent) {
+    // prevent default to allow drop
+    e.preventDefault();
+
     if (ref.current) {
       const rect = ref.current.getBoundingClientRect();
       const centerX = rect.left + rect.right;
@@ -18,30 +22,29 @@ export function Block(props: Props) {
 
       const diffX = props.freeX - centerX;
       const diffY = props.freeY - centerY;
-      return Math.sqrt(diffX * diffX + diffY + diffY).toFixed(2);
-    } else {
-      return undefined;
+      const d = Math.sqrt(diffX * diffX + diffY + diffY).toFixed(2);
+      console.log("drag over ", d);
+      setDistance(d);
     }
   }
-  const distance = calcDistance();
 
-  function onDragOver(e: React.DragEvent) {
-    // prevent default to allow drop
-    e.preventDefault();
+  function onDragLeave() {
+    setDistance(undefined);
   }
 
-  function onDrop(e: React.DragEvent) {
-    if (ref.current) {
-      const a = ref.current.getClientRects();
-    }
-  }
+  // function onDrop(e: React.DragEvent) {
+  //   if (ref.current) {
+  //     const a = ref.current.getClientRects();
+  //   }
+  // }
 
   return (
     <div
       ref={ref}
       className={styles.component}
       onDragOver={onDragOver}
-      onDrop={onDrop}
+      // onDrop={onDrop}
+      onDragLeave={onDragLeave}
     >
       <span className={styles.number}>{props.number}</span>
       {distance && <span className={styles.distance}>{distance}</span>}
