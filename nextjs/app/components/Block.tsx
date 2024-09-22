@@ -27,7 +27,7 @@ export function Block(props: Props) {
 
       const diffX = freeCenterX - blockX;
       const diffY = freeCenterY - blockY;
-      const d = Math.sqrt(diffX * diffX + diffY + diffY).toFixed(2);
+      const d = Math.sqrt(diffX * diffX + diffY * diffY).toFixed(2);
 
       // check distance change to avoid infinite loop
       if (distance !== d) {
