@@ -16,16 +16,28 @@ export function Block(props: Props) {
     const blockX = block.left + block.right;
     const blockY = block.top + block.bottom;
 
-    const freeCenterX = props.free.x1 + props.free.x2;
-    const freeCenterY = props.free.y1 + props.free.y2;
+    if (
+      block.left < props.free.x2 &&
+      block.top < props.free.y2 &&
+      props.free.x1 < block.right &&
+      props.free.y1 < block.bottom
+    ) {
+      const freeCenterX = props.free.x1 + props.free.x2;
+      const freeCenterY = props.free.y1 + props.free.y2;
 
-    const diffX = freeCenterX - blockX;
-    const diffY = freeCenterY - blockY;
-    const d = Math.sqrt(diffX * diffX + diffY + diffY).toFixed(2);
+      const diffX = freeCenterX - blockX;
+      const diffY = freeCenterY - blockY;
+      const d = Math.sqrt(diffX * diffX + diffY + diffY).toFixed(2);
 
-    // check distance change to avoid infinite loop
-    if (distance !== d) {
-      setDistance(d);
+      // check distance change to avoid infinite loop
+      if (distance !== d) {
+        setDistance(d);
+      }
+    } else {
+      // check distance change to avoid infinite loop
+      if (distance) {
+        setDistance(undefined);
+      }
     }
   }
 
