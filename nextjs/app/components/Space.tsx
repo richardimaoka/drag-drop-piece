@@ -25,8 +25,8 @@ export function Space() {
   });
   const [pos, setPos] = useState<Position>({ x: 0, y: 0 });
 
-  function onMouseDown(e: React.MouseEvent) {
-    console.log("drag start");
+  function onDragStart(e: React.MouseEvent) {
+    console.log("drag start", e.clientX, e.clientY);
     setDrag({
       status: "Dragged",
       currentX: e.clientX,
@@ -34,28 +34,38 @@ export function Space() {
     });
   }
 
-  function onMouseUp() {
-    console.log("drag finished");
-    setDrag({ status: "Undragged" });
-  }
-
-  function onMouseMove(e: React.MouseEvent) {
+  function onDrag(e: React.MouseEvent) {
     if (drag.status === "Dragged") {
-      console.log(e.clientX, e.clientY);
       const diffX = e.clientX - drag.currentX;
       const diffY = e.clientY - drag.currentY;
       setPos({ x: pos.x + diffX, y: pos.y + diffY });
-      setDrag({ status: "Dragged", currentX: e.clientX, currentY: e.clientY });
+      setDrag({
+        status: "Dragged",
+        currentX: e.clientX,
+        currentY: e.clientY,
+      });
+    }
+  }
+
+  function onDragEnd(e: React.MouseEvent) {
+    if (drag.status === "Dragged") {
+      console.log("drag finished");
+      const diffX = e.clientX - drag.currentX;
+      const diffY = e.clientY - drag.currentY;
+      setPos({ x: pos.x + diffX, y: pos.y + diffY });
+      setDrag({ status: "Undragged" });
     }
   }
 
   return (
-    <div className={styles.component} onMouseMove={onMouseMove}>
+    <div className={styles.component}>
       <Blocks />
       <div
+        draggable
         className={styles.free}
-        onMouseDown={onMouseDown}
-        onMouseUp={onMouseUp}
+        onDragStart={onDragStart}
+        onDrag={onDrag}
+        onDragEnd={onDragEnd}
         style={{ top: pos.y, left: pos.x }}
       >
         free
