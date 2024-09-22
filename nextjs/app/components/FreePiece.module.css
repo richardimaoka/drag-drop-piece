@@ -11,3 +11,7 @@
   border: solid 1px black;
   background-color: white;
 }
+
+.target {
+  transition: top 0.3s, left 0.3s;
+}

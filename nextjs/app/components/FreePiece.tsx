@@ -79,7 +79,7 @@ export function FreePiece(props: Props) {
 
   return (
     <div
-      className={styles.component}
+      className={styles.component + " " + styles.target}
       ref={ref}
       draggable
       onDragStart={onDragStart}
