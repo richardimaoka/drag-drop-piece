@@ -1,9 +1,9 @@
 import styles from "./Blocks.module.css";
 import { Block } from "./Block";
+import { Rect } from "./types";
 
 type Props = {
-  freeX: number;
-  freeY: number;
+  free?: Rect;
 };
 
 export function Blocks(props: Props) {
@@ -11,7 +11,7 @@ export function Blocks(props: Props) {
     <div className={styles.component}>
       <div className={styles.grid}>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-          <Block key={n} number={n} freeX={props.freeX} freeY={props.freeY} />
+          <Block key={n} number={n} free={props.free} />
         ))}
       </div>
     </div>

@@ -1,5 +1,6 @@
 import styles from "./FreePiece.module.css";
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { Rect } from "./types";
 
 type Position = {
   x: number;
@@ -17,12 +18,14 @@ type Undragged = {
 };
 
 type Props = {
-  onDragStart?: (x: number, y: number) => void;
-  onDrag?: (x: number, y: number) => void;
-  onDragEnd?: (x: number, y: number) => void;
+  // onDragStart?: (dragRect: Rect) => void;
+  onDrag?: (dragRect: Rect) => void;
+  // onDragEnd?: (dragRect: Rect) => void;
 };
 
 export function FreePiece(props: Props) {
+  const ref = useRef<HTMLDivElement>(null);
+
   const [drag, setDrag] = useState<Dragged | Undragged>({
     status: "Undragged",
   });
@@ -36,14 +39,27 @@ export function FreePiece(props: Props) {
       startY: e.clientY,
     });
 
-    if (props.onDragStart) {
-      props.onDragStart(e.clientX, e.clientY);
-    }
+    // if (props.onDragStart) {
+    //   props.onDragStart(e.clientX, e.clientY);
+    // }
   }
 
   function onDrag(e: React.MouseEvent) {
-    if (props.onDrag) {
-      props.onDrag(e.clientX, e.clientY);
+    if (ref.current && drag.status === "Dragged") {
+      const diffX = e.clientX - drag.startX;
+      const diffY = e.clientY - drag.startY;
+      const initialRect = ref.current.getBoundingClientRect();
+
+      const rect = {
+        x1: initialRect.left + diffX,
+        x2: initialRect.right + diffX,
+        y1: initialRect.top + diffY,
+        y2: initialRect.bottom + diffY,
+      };
+
+      if (props.onDrag) {
+        props.onDrag(rect);
+      }
     }
   }
 
@@ -55,15 +71,16 @@ export function FreePiece(props: Props) {
       setPos({ x: pos.x + diffX, y: pos.y + diffY });
       setDrag({ status: "Undragged" });
 
-      if (props.onDragEnd) {
-        props.onDragEnd(e.clientX, e.clientY);
-      }
+      // if (props.onDragEnd) {
+      //   props.onDragEnd(e.clientX, e.clientY);
+      // }
     }
   }
 
   return (
     <div
       className={styles.component}
+      ref={ref}
       draggable
       onDragStart={onDragStart}
       onDrag={onDrag}
