@@ -1,10 +1,29 @@
+import { useRef } from "react";
 import styles from "./Blocks.module.css";
 
 export function Blocks() {
+  const ref = useRef<HTMLDivElement>(null);
+  function onDragOver(e: React.DragEvent) {
+    e.preventDefault();
+    console.log("on drag over");
+    if (ref.current) {
+      const a = ref.current.getClientRects();
+      console.log("client rect", a);
+    }
+  }
+
+  function onDrop(e: React.DragEvent) {
+    console.log("on drop", e);
+    if (ref.current) {
+      const a = ref.current.getClientRects();
+      console.log("client rect", a);
+    }
+  }
+
   return (
-    <div className={styles.component}>
+    <div className={styles.component} onDragOver={onDragOver} onDrop={onDrop}>
       <div className={styles.grid}>
-        <div className={styles.block}>
+        <div ref={ref} className={styles.block}>
           <span className={styles.number}>1</span>
           <span className={styles.distance}>1.5478</span>
         </div>
