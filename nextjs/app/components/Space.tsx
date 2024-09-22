@@ -11,8 +11,8 @@ type Position = {
 
 type Dragged = {
   status: "Dragged";
-  currentX: number;
-  currentY: number;
+  startX: number;
+  startY: number;
 };
 
 type Undragged = {
@@ -29,29 +29,16 @@ export function Space() {
     console.log("drag start", e.clientX, e.clientY);
     setDrag({
       status: "Dragged",
-      currentX: e.clientX,
-      currentY: e.clientY,
+      startX: e.clientX,
+      startY: e.clientY,
     });
-  }
-
-  function onDrag(e: React.MouseEvent) {
-    if (drag.status === "Dragged") {
-      const diffX = e.clientX - drag.currentX;
-      const diffY = e.clientY - drag.currentY;
-      setPos({ x: pos.x + diffX, y: pos.y + diffY });
-      setDrag({
-        status: "Dragged",
-        currentX: e.clientX,
-        currentY: e.clientY,
-      });
-    }
   }
 
   function onDragEnd(e: React.MouseEvent) {
     if (drag.status === "Dragged") {
       console.log("drag finished");
-      const diffX = e.clientX - drag.currentX;
-      const diffY = e.clientY - drag.currentY;
+      const diffX = e.clientX - drag.startX;
+      const diffY = e.clientY - drag.startY;
       setPos({ x: pos.x + diffX, y: pos.y + diffY });
       setDrag({ status: "Undragged" });
     }
@@ -64,7 +51,6 @@ export function Space() {
         draggable
         className={styles.free}
         onDragStart={onDragStart}
-        onDrag={onDrag}
         onDragEnd={onDragEnd}
         style={{ top: pos.y, left: pos.x }}
       >
