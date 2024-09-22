@@ -1,0 +1,23 @@
+.component {
+  width: 100svw;
+  height: 100svh;
+
+  display: grid;
+  align-items: center;
+  justify-items: center;
+}
+
+.free {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+
+  width: 150px;
+  height: 150px;
+
+  display: grid;
+  align-items: center;
+  justify-items: center;
+
+  border: solid 1px black;
+}

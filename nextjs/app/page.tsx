@@ -1,10 +1,5 @@
-import { Blocks } from "./components/Blocks";
-import styles from "./page.module.css";
+import { Space } from "./components/Space";
 
 export default function Home() {
-  return (
-    <div className={styles.component}>
-      <Blocks />
-    </div>
-  );
+  return <Space />;
 }
