@@ -4,15 +4,34 @@ export function Blocks() {
   return (
     <div className={styles.component}>
       <div className={styles.grid}>
-        <div className={styles.block}>1</div>
-        <div className={styles.block}>2</div>
-        <div className={styles.block}>3</div>
-        <div className={styles.block}>4</div>
-        <div className={styles.block}>5</div>
-        <div className={styles.block}>6</div>
-        <div className={styles.block}>7</div>
-        <div className={styles.block}>8</div>
-        <div className={styles.block}>9</div>
+        <div className={styles.block}>
+          <span className={styles.number}>1</span>
+          <span className={styles.distance}>1.5478</span>
+        </div>
+        <div className={styles.block}>
+          <span className={styles.number}>2</span>
+        </div>
+        <div className={styles.block}>
+          <span className={styles.number}>3</span>
+        </div>
+        <div className={styles.block}>
+          <span className={styles.number}>4</span>
+        </div>
+        <div className={styles.block}>
+          <span className={styles.number}>5</span>
+        </div>
+        <div className={styles.block}>
+          <span className={styles.number}>6</span>
+        </div>
+        <div className={styles.block}>
+          <span className={styles.number}>7</span>
+        </div>
+        <div className={styles.block}>
+          <span className={styles.number}>8</span>
+        </div>
+        <div className={styles.block}>
+          <span className={styles.number}>9</span>
+        </div>
       </div>
     </div>
   );
