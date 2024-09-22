@@ -4,3 +4,8 @@ export type Rect = {
   y1: number;
   y2: number;
 };
+
+export type Position = {
+  x: number;
+  y: number;
+};

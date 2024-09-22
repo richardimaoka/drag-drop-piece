@@ -1,11 +1,6 @@
 import styles from "./FreePiece.module.css";
 import { useRef, useState } from "react";
-import { Rect } from "./types";
-
-type Position = {
-  x: number;
-  y: number;
-};
+import { Position, Rect } from "./types";
 
 type Dragged = {
   status: "Dragged";
@@ -21,6 +16,7 @@ type Props = {
   // onDragStart?: (dragRect: Rect) => void;
   onDrag?: (dragRect: Rect) => void;
   // onDragEnd?: (dragRect: Rect) => void;
+  targetPos?: Position;
 };
 
 export function FreePiece(props: Props) {
@@ -68,9 +64,13 @@ export function FreePiece(props: Props) {
       console.log("drag finished");
       const diffX = e.clientX - drag.startX;
       const diffY = e.clientY - drag.startY;
-      setPos({ x: pos.x + diffX, y: pos.y + diffY });
-      setDrag({ status: "Undragged" });
 
+      if (props.targetPos) {
+        setPos({ x: props.targetPos.x, y: props.targetPos.y });
+      } else {
+        setPos({ x: pos.x + diffX, y: pos.y + diffY });
+      }
+      setDrag({ status: "Undragged" });
       // if (props.onDragEnd) {
       //   props.onDragEnd(e.clientX, e.clientY);
       // }

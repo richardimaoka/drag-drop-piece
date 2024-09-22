@@ -16,7 +16,10 @@ export function Space() {
   return (
     <div className={styles.component}>
       <Blocks free={freeRect} />
-      <FreePiece onDrag={dragRect} />
+      <FreePiece
+        onDrag={dragRect}
+        // targetPos={{ x: 200, y: 500 }}
+      />
     </div>
   );
 }
