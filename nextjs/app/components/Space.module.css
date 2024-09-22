@@ -6,17 +6,3 @@
   align-items: center;
   justify-items: center;
 }
-
-.free {
-  position: absolute;
-
-  width: 150px;
-  height: 150px;
-
-  display: grid;
-  align-items: center;
-  justify-items: center;
-
-  border: solid 1px black;
-  background-color: white;
-}
