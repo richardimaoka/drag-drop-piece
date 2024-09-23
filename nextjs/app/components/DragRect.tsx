@@ -1,6 +1,7 @@
 import styles from "./DragRect.module.css";
 import { useEffect, useRef, useState } from "react";
 import { Position, Rect } from "./lib/types";
+import { center, distance, toRect } from "./lib/functions";
 
 type Dragged = {
   status: "Dragged";
@@ -32,10 +33,25 @@ type Props = {
 };
 
 function calcAnimationDuration(
-  dragRectElem: HTMLDivElement,
-  distance: number
-): number {
-  return 0.3;
+  dragRectElem: HTMLDivElement | null,
+  targetRect: Rect
+): string {
+  if (!dragRectElem) {
+    return "2s";
+  }
+
+  const dragRect = toRect(dragRectElem.getBoundingClientRect());
+  const dist = distance(center(dragRect), center(targetRect));
+  const relativeDistance = dist / Math.abs(dragRect.x2 - dragRect.x1);
+  const duration = relativeDistance * 0.1; /* seconds */
+  // console.log(
+  //   "relativeDistance",
+  //   relativeDistance,
+  //   "duration",
+  //   duration.toFixed(2)
+  // );
+
+  return `${duration.toFixed(1)}s`;
 }
 
 export function DragRect(props: Props) {
@@ -95,10 +111,10 @@ export function DragRect(props: Props) {
           targetRect: props.closestBlockRect,
         });
 
-        console.log("drag end", {
-          x: topLeftCorner.x + dragMovementX,
-          y: topLeftCorner.y + dragMovementY,
-        });
+        // console.log("drag end", {
+        //   x: topLeftCorner.x + dragMovementX,
+        //   y: topLeftCorner.y + dragMovementY,
+        // });
         setTopLeft({
           x: topLeftCorner.x + dragMovementX,
           y: topLeftCorner.y + dragMovementY,
@@ -120,10 +136,10 @@ export function DragRect(props: Props) {
     if (status.status === "AnimationTrigger") {
       setStatus({ status: "Animating", targetRect: status.targetRect });
 
-      console.log("AnimationTrigger", topLeftCorner, {
-        x: status.targetRect.x1,
-        y: status.targetRect.y1,
-      });
+      // console.log("AnimationTrigger", topLeftCorner, {
+      //   x: status.targetRect.x1,
+      //   y: status.targetRect.y1,
+      // });
 
       setTopLeft({
         x: status.targetRect.x1,
@@ -148,7 +164,10 @@ export function DragRect(props: Props) {
           ? {
               top: topLeftCorner.y,
               left: topLeftCorner.x,
-              // transitionDuration: calcAnimationDuration(),
+              transitionDuration: calcAnimationDuration(
+                ref.current,
+                status.targetRect
+              ),
             }
           : { top: topLeftCorner.y, left: topLeftCorner.x }
       }
