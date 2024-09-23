@@ -3,7 +3,7 @@ import { Block } from "./Block";
 import { Rect } from "./lib/types";
 
 type Props = {
-  free?: Rect;
+  draggedRect?: Rect;
   onOverlap?: (n: number, distance: number) => void;
   closestBlockNum?: number;
 };
@@ -16,7 +16,7 @@ export function Blocks(props: Props) {
           <Block
             key={n}
             number={n}
-            free={props.free}
+            draggedRect={props.draggedRect}
             isClosest={props.closestBlockNum === n}
             onOverlap={props.onOverlap}
           />

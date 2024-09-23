@@ -15,7 +15,7 @@ type Undragged = {
 type Props = {
   // onDragStart?: (dragRect: Rect) => void;
   onDrag?: (dragRect: Rect) => void;
-  // onDragEnd?: (dragRect: Rect) => void;
+  onDragEnd?: (dragRect: Rect) => void;
   targetPos?: Position;
 };
 
@@ -28,7 +28,6 @@ export function FreePiece(props: Props) {
   const [pos, setPos] = useState<Position>({ x: 0, y: 0 });
 
   function onDragStart(e: React.MouseEvent) {
-    console.log("drag start", e.clientX, e.clientY);
     setDrag({
       status: "Dragged",
       startX: e.clientX,
@@ -44,13 +43,13 @@ export function FreePiece(props: Props) {
     if (ref.current && drag.status === "Dragged") {
       const diffX = e.clientX - drag.startX;
       const diffY = e.clientY - drag.startY;
-      const initialRect = ref.current.getBoundingClientRect();
+      const dragStartRect = ref.current.getBoundingClientRect();
 
       const rect = {
-        x1: initialRect.left + diffX,
-        x2: initialRect.right + diffX,
-        y1: initialRect.top + diffY,
-        y2: initialRect.bottom + diffY,
+        x1: dragStartRect.left + diffX,
+        x2: dragStartRect.right + diffX,
+        y1: dragStartRect.top + diffY,
+        y2: dragStartRect.bottom + diffY,
       };
 
       if (props.onDrag) {
@@ -61,7 +60,6 @@ export function FreePiece(props: Props) {
 
   function onDragEnd(e: React.MouseEvent) {
     if (drag.status === "Dragged") {
-      console.log("drag finished");
       const diffX = e.clientX - drag.startX;
       const diffY = e.clientY - drag.startY;
 
