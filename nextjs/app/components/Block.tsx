@@ -1,6 +1,7 @@
 import { useRef } from "react";
 import styles from "./Block.module.css";
 import { Rect } from "./types";
+import { isOverlapped, toRect } from "./functions";
 
 type Props = {
   number: number;
@@ -13,15 +14,11 @@ export function Block(props: Props) {
   function calcDistance(): number | undefined {
     if (ref.current && props.free) {
       const block = ref.current.getBoundingClientRect();
+      const blockRect = toRect(block);
       const blockX = block.left + block.right;
       const blockY = block.top + block.bottom;
 
-      if (
-        block.left < props.free.x2 &&
-        block.top < props.free.y2 &&
-        props.free.x1 < block.right &&
-        props.free.y1 < block.bottom
-      ) {
+      if (isOverlapped(blockRect, props.free)) {
         const freeCenterX = props.free.x1 + props.free.x2;
         const freeCenterY = props.free.y1 + props.free.y2;
 
