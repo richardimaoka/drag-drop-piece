@@ -8,22 +8,29 @@ type Dragged = {
   startY: number;
 };
 
-type Undragged = {
-  status: "Undragged";
+type Static = {
+  status: "Static";
 };
+
+type Animating = {
+  status: "Animating";
+  targetRect: Rect;
+};
+
+type Status = Dragged | Static | Animating;
 
 type Props = {
   // onDragStart?: (dragRect: Rect) => void;
   onDrag?: (dragRect: Rect) => void;
   onDragEnd?: (dragRect: Rect) => void;
-  targetRect?: Rect;
+  closestBlockRect?: Rect;
 };
 
 export function DragRect(props: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const [drag, setDrag] = useState<Dragged | Undragged>({
-    status: "Undragged",
+  const [drag, setDrag] = useState<Status>({
+    status: "Static",
   });
   const [pos, setPos] = useState<Position>({ x: 0, y: 0 });
 
@@ -40,6 +47,11 @@ export function DragRect(props: Props) {
   }
 
   function onDrag(e: React.MouseEvent) {
+    // This happens at the end of drag somehow...
+    if (e.clientX === 0 && e.clientY === 0) {
+      return;
+    }
+
     if (ref.current && drag.status === "Dragged") {
       const diffX = e.clientX - drag.startX;
       const diffY = e.clientY - drag.startY;
@@ -63,14 +75,15 @@ export function DragRect(props: Props) {
       const diffX = e.clientX - drag.startX;
       const diffY = e.clientY - drag.startY;
 
-      console.log("target rect", props.targetRect, "pos", pos);
+      console.log("target rect", props.closestBlockRect, "pos", pos);
 
-      if (props.targetRect) {
-        setPos({ x: props.targetRect.x1, y: props.targetRect.y1 });
+      if (props.closestBlockRect) {
+        setDrag({ status: "Animating", targetRect: props.closestBlockRect });
+        // setPos({ x: props.closestBlockRect.x1, y: props.closestBlockRect.y1 });
       } else {
         setPos({ x: pos.x + diffX, y: pos.y + diffY });
       }
-      setDrag({ status: "Undragged" });
+      setDrag({ status: "Static" });
       // if (props.onDragEnd) {
       //   props.onDragEnd(e.clientX, e.clientY);
       // }
@@ -79,7 +92,7 @@ export function DragRect(props: Props) {
 
   return (
     <div
-      className={styles.component + " " + styles.target}
+      className={styles.component}
       ref={ref}
       draggable
       onDragStart={onDragStart}

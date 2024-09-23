@@ -18,7 +18,7 @@ export function Block(props: Props) {
   //   `Cannot update a component while rendering a different component`
   const { number, onRender } = props;
   useEffect(() => {
-    console.log("block useEffect", number);
+    // console.log("block useEffect", number);
     if (ref.current && onRender) {
       const blockRect = toRect(ref.current.getBoundingClientRect());
       onRender(number, blockRect);

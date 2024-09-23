@@ -36,6 +36,8 @@ import { nonNullArray } from "./lib/nonNullArray";
 // }
 
 function minDistanceBlock(dragRect: Rect, blocks: Block[]): Block | undefined {
+  // console.log("minDistanceBlock started", dragRect, blocks);
+
   let minDistance: number | undefined = undefined;
   let minBlock: Block | undefined = undefined;
 
@@ -63,6 +65,7 @@ function minDistanceBlock(dragRect: Rect, blocks: Block[]): Block | undefined {
   if (minBlock && minDistance) {
     return minBlock;
   } else {
+    // console.log("minDistanceBlock return undefined", minBlock, minDistance);
     return undefined;
   }
 }
@@ -71,7 +74,9 @@ function calcClosestOverlap(
   dragRect: Rect | undefined,
   blocksWithUndefined: (Block | undefined)[]
 ): Block | undefined {
+  // console.log("calcClosestOverlap", dragRect, blocksWithUndefined);
   if (!dragRect) {
+    // console.log("!dragRect return undefined");
     return undefined;
   }
 
@@ -102,7 +107,7 @@ export function Space() {
   ]);
 
   function onDrag(rect: Rect) {
-    // console.log("on drag");
+    console.log("on drag", rect);
     setDragRect(rect);
   }
 
@@ -120,14 +125,17 @@ export function Space() {
   }
 
   const closestOverlappingBlock = calcClosestOverlap(dragRect, blocks);
-
+  // console.log("closestOverlappingBlock", closestOverlappingBlock);
   return (
     <div className={styles.component}>
       <Blocks
         onOverlap={onRender}
         closestBlockNum={closestOverlappingBlock?.number}
       />
-      <DragRect onDrag={onDrag} />
+      <DragRect
+        onDrag={onDrag}
+        closestBlockRect={closestOverlappingBlock?.rect}
+      />
     </div>
   );
 }
