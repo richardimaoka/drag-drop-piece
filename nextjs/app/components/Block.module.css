@@ -15,6 +15,10 @@
   border: 1px solid rgb(216, 216, 216);
 }
 
+.component.overlapped {
+  background-color: rgb(214, 214, 117);
+}
+
 .number {
   grid-area: number;
   font-size: 40px;

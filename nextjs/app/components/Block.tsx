@@ -27,7 +27,10 @@ export function Block(props: Props) {
   const dist = calcDistance();
 
   return (
-    <div ref={ref} className={styles.component}>
+    <div
+      ref={ref}
+      className={styles.component + (dist ? " " + styles.overlapped : "")}
+    >
       <span className={styles.number}>{props.number}</span>
       {dist && <span className={styles.distance}>{dist.toFixed(2)}</span>}
     </div>
