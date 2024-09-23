@@ -16,6 +16,10 @@
 }
 
 .component.overlapped {
+  background-color: rgb(224, 224, 191);
+}
+
+.component.closest {
   background-color: rgb(214, 214, 117);
 }
 
