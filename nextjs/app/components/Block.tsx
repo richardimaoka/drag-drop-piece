@@ -6,7 +6,7 @@ import { center, distance, isOverlapped, toRect } from "./lib/functions";
 type Props = {
   number: number;
   free?: Rect;
-  onOverlap?: (n: number, o: Overlap) => void;
+  onOverlap?: (n: number, distance: number) => void;
   closest?: boolean;
 };
 
@@ -33,7 +33,7 @@ export function Block(props: Props) {
   const overlap = calcOverlap();
 
   if (overlap && props.onOverlap) {
-    props.onOverlap(props.number, overlap);
+    props.onOverlap(props.number, overlap.distance);
   }
 
   return (

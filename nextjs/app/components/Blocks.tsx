@@ -1,10 +1,10 @@
 import styles from "./Blocks.module.css";
 import { Block } from "./Block";
-import { Overlap, Rect } from "./lib/types";
+import { Rect } from "./lib/types";
 
 type Props = {
   free?: Rect;
-  onOverlap?: (n: number, o: Overlap) => void;
+  onOverlap?: (n: number, distance: number) => void;
   closestNum?: number;
 };
 
