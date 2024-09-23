@@ -7,7 +7,7 @@ type Props = {
   number: number;
   free?: Rect;
   onOverlap?: (n: number, distance: number) => void;
-  closest?: boolean;
+  isClosest?: boolean;
 };
 
 export function Block(props: Props) {
@@ -41,7 +41,7 @@ export function Block(props: Props) {
       ref={ref}
       className={
         styles.component +
-        (props.closest
+        (props.isClosest
           ? " " + styles.closest
           : dist
           ? " " + styles.overlapped

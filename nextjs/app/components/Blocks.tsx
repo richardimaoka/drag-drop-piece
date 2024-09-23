@@ -5,7 +5,7 @@ import { Rect } from "./lib/types";
 type Props = {
   free?: Rect;
   onOverlap?: (n: number, distance: number) => void;
-  closestNum?: number;
+  closestBlockNum?: number;
 };
 
 export function Blocks(props: Props) {
@@ -17,7 +17,7 @@ export function Blocks(props: Props) {
             key={n}
             number={n}
             free={props.free}
-            closest={props.closestNum === n}
+            isClosest={props.closestBlockNum === n}
             onOverlap={props.onOverlap}
           />
         ))}
