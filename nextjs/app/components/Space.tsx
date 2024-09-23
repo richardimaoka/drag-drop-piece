@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Blocks } from "./Blocks";
 import styles from "./Space.module.css";
 import { FreePiece } from "./FreePiece";
-import { Rect } from "./types";
+import { Rect } from "./lib/types";
 
 export function Space() {
   const [freeRect, setRect] = useState<Rect | undefined>(undefined);

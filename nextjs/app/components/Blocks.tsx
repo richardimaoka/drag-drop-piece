@@ -1,6 +1,6 @@
 import styles from "./Blocks.module.css";
 import { Block } from "./Block";
-import { Rect } from "./types";
+import { Rect } from "./lib/types";
 
 type Props = {
   free?: Rect;

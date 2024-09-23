@@ -1,6 +1,6 @@
 import styles from "./FreePiece.module.css";
 import { useRef, useState } from "react";
-import { Position, Rect } from "./types";
+import { Position, Rect } from "./lib/types";
 
 type Dragged = {
   status: "Dragged";
