@@ -3,9 +3,7 @@ import { Block } from "./Block";
 import { Rect } from "./lib/types";
 
 type Props = {
-  draggedRect?: Rect;
   onOverlap?: (n: number, rect: Rect) => void;
-  offOverlap?: (n: number) => void;
   closestBlockNum?: number;
 };
 
@@ -17,10 +15,8 @@ export function Blocks(props: Props) {
           <Block
             key={n}
             number={n}
-            draggedRect={props.draggedRect}
             isClosest={props.closestBlockNum === n}
             onRender={props.onOverlap}
-            offOverlap={props.offOverlap}
           />
         ))}
       </div>

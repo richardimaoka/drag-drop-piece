@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Blocks } from "./Blocks";
 import styles from "./Space.module.css";
-import { FreePiece } from "./FreePiece";
+import { DragRect } from "./DragRect";
 import { Rect } from "./lib/types";
 import { center, distance, isOverlapped, sameRect } from "./lib/functions";
 import { nonNullArray } from "./lib/nonNullArray";
@@ -124,12 +124,10 @@ export function Space() {
   return (
     <div className={styles.component}>
       <Blocks
-        draggedRect={dragRect}
         onOverlap={onRender}
-        // offOverlap={offOverlap}
         closestBlockNum={closestOverlappingBlock?.number}
       />
-      <FreePiece onDrag={onDrag} />
+      <DragRect onDrag={onDrag} />
     </div>
   );
 }

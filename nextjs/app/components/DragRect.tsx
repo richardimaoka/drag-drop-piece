@@ -1,4 +1,4 @@
-import styles from "./FreePiece.module.css";
+import styles from "./DragRect.module.css";
 import { useRef, useState } from "react";
 import { Position, Rect } from "./lib/types";
 
@@ -19,7 +19,7 @@ type Props = {
   targetRect?: Rect;
 };
 
-export function FreePiece(props: Props) {
+export function DragRect(props: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
   const [drag, setDrag] = useState<Dragged | Undragged>({
