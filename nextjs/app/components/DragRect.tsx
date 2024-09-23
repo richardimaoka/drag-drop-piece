@@ -60,6 +60,7 @@ export function DragRect(props: Props) {
   const [status, setStatus] = useState<Status>({
     status: "Static",
   });
+
   const [topLeftCorner, setTopLeft] = useState<Position>({ x: 0, y: 0 });
 
   function onDragStart(e: React.MouseEvent) {
@@ -106,20 +107,20 @@ export function DragRect(props: Props) {
       // console.log("target rect", props.closestBlockRect, "pos", pos);
 
       if (props.closestBlockRect) {
-        setStatus({
-          status: "AnimationTrigger",
-          targetRect: props.closestBlockRect,
-        });
-
         // console.log("drag end", {
         //   x: topLeftCorner.x + dragMovementX,
         //   y: topLeftCorner.y + dragMovementY,
         // });
+        setStatus({
+          status: "AnimationTrigger",
+          targetRect: props.closestBlockRect,
+        });
         setTopLeft({
           x: topLeftCorner.x + dragMovementX,
           y: topLeftCorner.y + dragMovementY,
         });
       } else {
+        setStatus({ status: "Static" });
         setTopLeft({
           x: topLeftCorner.x + dragMovementX,
           y: topLeftCorner.y + dragMovementY,
@@ -152,7 +153,8 @@ export function DragRect(props: Props) {
     <div
       className={
         styles.component +
-        (status.status === "Animating" ? " " + styles.animate : "")
+        (status.status === "Animating" ? " " + styles.animate : "") +
+        (status.status === "Dragged" ? " " + styles.dragged : "")
       }
       ref={ref}
       draggable
