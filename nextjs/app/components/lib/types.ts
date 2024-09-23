@@ -9,3 +9,9 @@ export type Position = {
   x: number;
   y: number;
 };
+
+export type Overlap = {
+  freeRect: Rect;
+  blockRect: Rect;
+  distance: number;
+};

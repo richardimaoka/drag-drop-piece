@@ -14,8 +14,8 @@ export function Space() {
     setRect(rect);
   }
 
-  function onOverlap(n: number, distance: number, blockRect: Rect) {
-    setDummy(dummy + n);
+  function onOverlap(n: number, o: Overlap) {
+    // setDummy(dummy + n);
   }
 
   return (

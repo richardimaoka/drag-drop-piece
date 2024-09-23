@@ -1,18 +1,13 @@
 import { useRef } from "react";
 import styles from "./Block.module.css";
-import { Rect } from "./lib/types";
+import { Overlap, Rect } from "./lib/types";
 import { center, distance, isOverlapped, toRect } from "./lib/functions";
 
 type Props = {
   number: number;
   free?: Rect;
-  onOverlap?: (n: number, distance: number, blockRect: Rect) => void;
+  onOverlap?: (n: number, o: Overlap) => void;
   closest?: boolean;
-};
-
-type Overlap = {
-  blockRect: Rect;
-  distance: number;
 };
 
 export function Block(props: Props) {
@@ -24,6 +19,7 @@ export function Block(props: Props) {
 
       if (isOverlapped(blockRect, props.free)) {
         return {
+          freeRect: props.free,
           blockRect: blockRect,
           distance: distance(center(blockRect), center(props.free)),
         };
@@ -37,7 +33,7 @@ export function Block(props: Props) {
   const overlap = calcOverlap();
 
   if (overlap && props.onOverlap) {
-    props.onOverlap(props.number, overlap.distance, overlap.blockRect);
+    props.onOverlap(props.number, overlap);
   }
 
   return (
