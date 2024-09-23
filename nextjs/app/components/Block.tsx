@@ -7,6 +7,7 @@ type Props = {
   number: number;
   draggedRect?: Rect;
   onOverlap?: (n: number, rect: Rect) => void;
+  offOverlap?: (n: number) => void;
   isClosest?: boolean;
 };
 
@@ -41,6 +42,8 @@ export function Block(props: Props) {
   useEffect(() => {
     if (overlap && props.onOverlap) {
       props.onOverlap(props.number, overlap.blockRect);
+    } else if (!overlap && props.offOverlap) {
+      props.offOverlap(props.number);
     }
   }, [overlap, props]);
 

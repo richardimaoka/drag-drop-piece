@@ -7,8 +7,11 @@ import { FreePiece } from "./FreePiece";
 import { Rect } from "./lib/types";
 import { center, distance, sameRect } from "./lib/functions";
 
-function minIndex(dragRect: Rect, arr: (Rect | undefined)[]): number {
-  let minIndex = 0;
+function minIndex(
+  dragRect: Rect,
+  arr: (Rect | undefined)[]
+): number | undefined {
+  let minIndex: number | undefined = undefined;
   let minDistance: number | undefined = undefined;
 
   for (let index = 0; index < arr.length; index++) {
@@ -27,6 +30,7 @@ function minIndex(dragRect: Rect, arr: (Rect | undefined)[]): number {
       }
     }
   }
+
   return minIndex;
 }
 
@@ -50,7 +54,8 @@ export function Space() {
 
   function onOverlap(n: number, rect: Rect) {
     const index = n - 1;
-    if (blocks[index] && sameRect(blocks[index], rect)) {
+    const block = blocks[index];
+    if (block && sameRect(block, rect)) {
       return;
     }
 
@@ -59,9 +64,18 @@ export function Space() {
     setBlocks(updated);
   }
 
-  const minBlockIndex = dragRect ? minIndex(dragRect, blocks) : 0;
-  const targetRect =
-    minBlockIndex === 0 ? undefined : blocks[minBlockIndex - 1];
+  function offOverlap(n: number) {
+    const index = n - 1;
+    const block = blocks[index];
+    if (block) {
+      const updated = [...blocks];
+      updated[index] = undefined;
+      setBlocks(updated);
+    }
+  }
+
+  const minBlockIndex = dragRect ? minIndex(dragRect, blocks) : undefined;
+  const targetRect = minBlockIndex ? blocks[minBlockIndex] : undefined;
 
   console.log(
     "minBlockIndex",
@@ -77,6 +91,7 @@ export function Space() {
       <Blocks
         draggedRect={dragRect}
         onOverlap={onOverlap}
+        offOverlap={offOverlap}
         closestBlockNum={minBlockIndex}
       />
       <FreePiece onDrag={onDrag} targetRect={targetRect} />

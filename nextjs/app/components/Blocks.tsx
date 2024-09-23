@@ -5,6 +5,7 @@ import { Rect } from "./lib/types";
 type Props = {
   draggedRect?: Rect;
   onOverlap?: (n: number, rect: Rect) => void;
+  offOverlap?: (n: number) => void;
   closestBlockNum?: number;
 };
 
@@ -19,6 +20,7 @@ export function Blocks(props: Props) {
             draggedRect={props.draggedRect}
             isClosest={props.closestBlockNum === n}
             onOverlap={props.onOverlap}
+            offOverlap={props.offOverlap}
           />
         ))}
       </div>
