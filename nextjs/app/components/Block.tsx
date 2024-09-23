@@ -6,7 +6,7 @@ import { center, distance, isOverlapped, toRect } from "./lib/functions";
 type Props = {
   number: number;
   draggedRect?: Rect;
-  onOverlap?: (n: number, rect: Rect) => void;
+  onRender?: (n: number, rect: Rect) => void;
   offOverlap?: (n: number) => void;
   isClosest?: boolean;
 };
@@ -39,13 +39,14 @@ export function Block(props: Props) {
 
   // useEffect to avoid the following error:
   //   `Cannot update a component while rendering a different component`
+  const { number, onRender } = props;
   useEffect(() => {
-    if (overlap && props.onOverlap) {
-      props.onOverlap(props.number, overlap.blockRect);
-    } else if (!overlap && props.offOverlap) {
-      props.offOverlap(props.number);
+    console.log("block useEffect", number);
+    if (ref.current && onRender) {
+      const blockRect = toRect(ref.current.getBoundingClientRect());
+      onRender(number, blockRect);
     }
-  }, [overlap, props]);
+  }, [number, onRender]);
 
   return (
     <div

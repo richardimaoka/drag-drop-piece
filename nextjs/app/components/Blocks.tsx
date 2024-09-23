@@ -19,7 +19,7 @@ export function Blocks(props: Props) {
             number={n}
             draggedRect={props.draggedRect}
             isClosest={props.closestBlockNum === n}
-            onOverlap={props.onOverlap}
+            onRender={props.onOverlap}
             offOverlap={props.offOverlap}
           />
         ))}
