@@ -62,7 +62,10 @@ export function Space() {
         onOverlap={onOverlap}
         closestBlockNum={minBlockIndex}
       />
-      <FreePiece onDrag={dragRect} targetPos={{ x: 200, y: 500 }} />
+      <FreePiece
+        onDrag={dragRect}
+        targetPos={{ x: 647.7272338867188, y: 497.272705078125 }}
+      />
     </div>
   );
 }

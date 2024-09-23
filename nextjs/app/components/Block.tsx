@@ -31,6 +31,10 @@ export function Block(props: Props) {
   // useEffect to avoid the following error:
   //   `Cannot update a component while rendering a different component`
   useEffect(() => {
+    if (ref.current && props.free) {
+      const blockRect = toRect(ref.current.getBoundingClientRect());
+      console.log(props.number, blockRect);
+    }
     if (dist && props.onOverlap) {
       props.onOverlap(props.number, dist);
     }
