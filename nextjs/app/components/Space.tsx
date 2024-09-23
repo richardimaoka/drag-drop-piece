@@ -12,8 +12,8 @@ function minIndex(dragRect: Rect, arr: (Rect | undefined)[]): number {
   let minDistance: number | undefined = undefined;
 
   for (let index = 0; index < arr.length; index++) {
-    const rect = arr[index];
-    const dist = rect ? distance(center(dragRect), center(rect)) : undefined;
+    const block = arr[index];
+    const dist = block ? distance(center(dragRect), center(block)) : undefined;
 
     if (minDistance) {
       if (dist && dist < minDistance) {
@@ -49,19 +49,28 @@ export function Space() {
   }
 
   function onOverlap(n: number, rect: Rect) {
-    if (blocks[n] && sameRect(blocks[n], rect)) {
+    const index = n - 1;
+    if (blocks[index] && sameRect(blocks[index], rect)) {
       return;
     }
 
     const updated = [...blocks];
-    updated[n] = rect;
+    updated[index] = rect;
     setBlocks(updated);
   }
 
   const minBlockIndex = dragRect ? minIndex(dragRect, blocks) : 0;
-  const targetRect = minBlockIndex
-    ? blocks[minBlockIndex - 1]
-    : undefined;
+  const targetRect =
+    minBlockIndex === 0 ? undefined : blocks[minBlockIndex - 1];
+
+  console.log(
+    "minBlockIndex",
+    minBlockIndex,
+    minBlockIndex === 0,
+    "target rect",
+    targetRect,
+    blocks
+  );
 
   return (
     <div className={styles.component}>

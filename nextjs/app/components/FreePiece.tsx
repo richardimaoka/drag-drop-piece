@@ -63,6 +63,8 @@ export function FreePiece(props: Props) {
       const diffX = e.clientX - drag.startX;
       const diffY = e.clientY - drag.startY;
 
+      console.log("target rect", props.targetRect, "pos", pos);
+
       if (props.targetRect) {
         setPos({ x: props.targetRect.x1, y: props.targetRect.y1 });
       } else {
