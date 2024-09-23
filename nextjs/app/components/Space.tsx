@@ -49,10 +49,12 @@ export function Space() {
   ]);
 
   function onDrag(rect: Rect) {
+    console.log("on drag");
     setDragRect(rect);
   }
 
   function onOverlap(n: number, rect: Rect) {
+    console.log("on overlap");
     const index = n - 1;
     const block = blocks[index];
     if (block && sameRect(block, rect)) {
@@ -65,6 +67,7 @@ export function Space() {
   }
 
   function offOverlap(n: number) {
+    console.log("off overlap");
     const index = n - 1;
     const block = blocks[index];
     if (block) {
@@ -75,16 +78,12 @@ export function Space() {
   }
 
   const minBlockIndex = dragRect ? minIndex(dragRect, blocks) : undefined;
-  const targetRect = minBlockIndex ? blocks[minBlockIndex] : undefined;
+  const minBlockNumber =
+    typeof minBlockIndex === "number" ? minBlockIndex + 1 : undefined;
+  const targetRect =
+    typeof minBlockIndex === "number" ? blocks[minBlockIndex] : undefined;
 
-  console.log(
-    "minBlockIndex",
-    minBlockIndex,
-    minBlockIndex === 0,
-    "target rect",
-    targetRect,
-    blocks
-  );
+  console.log("minBlockIndex", minBlockIndex, "targetRect", targetRect, blocks);
 
   return (
     <div className={styles.component}>
@@ -92,7 +91,7 @@ export function Space() {
         draggedRect={dragRect}
         onOverlap={onOverlap}
         offOverlap={offOverlap}
-        closestBlockNum={minBlockIndex}
+        closestBlockNum={minBlockNumber}
       />
       <FreePiece onDrag={onDrag} targetRect={targetRect} />
     </div>
