@@ -107,7 +107,7 @@ export function Space() {
   ]);
 
   function onDrag(rect: Rect) {
-    console.log("on drag", rect);
+    // console.log("on drag", rect);
     setDragRect(rect);
   }
 

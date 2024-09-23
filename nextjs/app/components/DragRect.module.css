@@ -11,3 +11,9 @@
   border: solid 1px black;
   background-color: white;
 }
+
+.animate {
+  transition-property: top, left;
+  transition-timing-function: ease-in;
+  transition-duration: 0.3s;
+}

@@ -1,15 +1,20 @@
 import styles from "./DragRect.module.css";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Position, Rect } from "./lib/types";
 
 type Dragged = {
   status: "Dragged";
-  startX: number;
-  startY: number;
+  dragStartX: number;
+  dragStartY: number;
 };
 
 type Static = {
   status: "Static";
+};
+
+type AnimationTrigger = {
+  status: "AnimationTrigger";
+  targetRect: Rect;
 };
 
 type Animating = {
@@ -17,7 +22,7 @@ type Animating = {
   targetRect: Rect;
 };
 
-type Status = Dragged | Static | Animating;
+type Status = Dragged | Static | AnimationTrigger | Animating;
 
 type Props = {
   // onDragStart?: (dragRect: Rect) => void;
@@ -26,19 +31,26 @@ type Props = {
   closestBlockRect?: Rect;
 };
 
+function calcAnimationDuration(
+  dragRectElem: HTMLDivElement,
+  distance: number
+): number {
+  return 0.3;
+}
+
 export function DragRect(props: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
-  const [drag, setDrag] = useState<Status>({
+  const [status, setStatus] = useState<Status>({
     status: "Static",
   });
-  const [pos, setPos] = useState<Position>({ x: 0, y: 0 });
+  const [topLeftCorner, setTopLeft] = useState<Position>({ x: 0, y: 0 });
 
   function onDragStart(e: React.MouseEvent) {
-    setDrag({
+    setStatus({
       status: "Dragged",
-      startX: e.clientX,
-      startY: e.clientY,
+      dragStartX: e.clientX,
+      dragStartY: e.clientY,
     });
 
     // if (props.onDragStart) {
@@ -52,16 +64,16 @@ export function DragRect(props: Props) {
       return;
     }
 
-    if (ref.current && drag.status === "Dragged") {
-      const diffX = e.clientX - drag.startX;
-      const diffY = e.clientY - drag.startY;
-      const dragStartRect = ref.current.getBoundingClientRect();
+    if (ref.current && status.status === "Dragged") {
+      const diffX = e.clientX - status.dragStartX;
+      const diffY = e.clientY - status.dragStartY;
+      const beforeDragRect = ref.current.getBoundingClientRect();
 
       const rect = {
-        x1: dragStartRect.left + diffX,
-        x2: dragStartRect.right + diffX,
-        y1: dragStartRect.top + diffY,
-        y2: dragStartRect.bottom + diffY,
+        x1: beforeDragRect.left + diffX,
+        x2: beforeDragRect.right + diffX,
+        y1: beforeDragRect.top + diffY,
+        y2: beforeDragRect.bottom + diffY,
       };
 
       if (props.onDrag) {
@@ -71,34 +83,76 @@ export function DragRect(props: Props) {
   }
 
   function onDragEnd(e: React.MouseEvent) {
-    if (drag.status === "Dragged") {
-      const diffX = e.clientX - drag.startX;
-      const diffY = e.clientY - drag.startY;
+    if (status.status === "Dragged") {
+      const dragMovementX = e.clientX - status.dragStartX;
+      const dragMovementY = e.clientY - status.dragStartY;
 
-      console.log("target rect", props.closestBlockRect, "pos", pos);
+      // console.log("target rect", props.closestBlockRect, "pos", pos);
 
       if (props.closestBlockRect) {
-        setDrag({ status: "Animating", targetRect: props.closestBlockRect });
-        // setPos({ x: props.closestBlockRect.x1, y: props.closestBlockRect.y1 });
+        setStatus({
+          status: "AnimationTrigger",
+          targetRect: props.closestBlockRect,
+        });
+
+        console.log("drag end", {
+          x: topLeftCorner.x + dragMovementX,
+          y: topLeftCorner.y + dragMovementY,
+        });
+        setTopLeft({
+          x: topLeftCorner.x + dragMovementX,
+          y: topLeftCorner.y + dragMovementY,
+        });
       } else {
-        setPos({ x: pos.x + diffX, y: pos.y + diffY });
+        setTopLeft({
+          x: topLeftCorner.x + dragMovementX,
+          y: topLeftCorner.y + dragMovementY,
+        });
       }
-      setDrag({ status: "Static" });
-      // if (props.onDragEnd) {
-      //   props.onDragEnd(e.clientX, e.clientY);
-      // }
     }
   }
 
+  function onAnimationEnd() {
+    setStatus({ status: "Static" });
+  }
+
+  useEffect(() => {
+    if (status.status === "AnimationTrigger") {
+      setStatus({ status: "Animating", targetRect: status.targetRect });
+
+      console.log("AnimationTrigger", topLeftCorner, {
+        x: status.targetRect.x1,
+        y: status.targetRect.y1,
+      });
+
+      setTopLeft({
+        x: status.targetRect.x1,
+        y: status.targetRect.y1,
+      });
+    }
+  }, [topLeftCorner, status]);
+
   return (
     <div
-      className={styles.component}
+      className={
+        styles.component +
+        (status.status === "Animating" ? " " + styles.animate : "")
+      }
       ref={ref}
       draggable
       onDragStart={onDragStart}
       onDrag={onDrag}
       onDragEnd={onDragEnd}
-      style={{ top: pos.y, left: pos.x }}
+      style={
+        status.status === "Animating"
+          ? {
+              top: topLeftCorner.y,
+              left: topLeftCorner.x,
+              // transitionDuration: calcAnimationDuration(),
+            }
+          : { top: topLeftCorner.y, left: topLeftCorner.x }
+      }
+      onTransitionEnd={onAnimationEnd}
     >
       free
     </div>
