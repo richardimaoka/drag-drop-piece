@@ -9,42 +9,40 @@ type Props = {
 
 export function Block(props: Props) {
   const ref = useRef<HTMLDivElement>(null);
-  const [distance, setDistance] = useState<string | undefined>(undefined);
 
-  if (ref.current && props.free) {
-    const block = ref.current.getBoundingClientRect();
-    const blockX = block.left + block.right;
-    const blockY = block.top + block.bottom;
+  function calcDistance(): number | undefined {
+    if (ref.current && props.free) {
+      const block = ref.current.getBoundingClientRect();
+      const blockX = block.left + block.right;
+      const blockY = block.top + block.bottom;
 
-    if (
-      block.left < props.free.x2 &&
-      block.top < props.free.y2 &&
-      props.free.x1 < block.right &&
-      props.free.y1 < block.bottom
-    ) {
-      const freeCenterX = props.free.x1 + props.free.x2;
-      const freeCenterY = props.free.y1 + props.free.y2;
+      if (
+        block.left < props.free.x2 &&
+        block.top < props.free.y2 &&
+        props.free.x1 < block.right &&
+        props.free.y1 < block.bottom
+      ) {
+        const freeCenterX = props.free.x1 + props.free.x2;
+        const freeCenterY = props.free.y1 + props.free.y2;
 
-      const diffX = freeCenterX - blockX;
-      const diffY = freeCenterY - blockY;
-      const d = Math.sqrt(diffX * diffX + diffY * diffY).toFixed(2);
+        const diffX = freeCenterX - blockX;
+        const diffY = freeCenterY - blockY;
 
-      // check distance change to avoid infinite loop
-      if (distance !== d) {
-        setDistance(d);
-      }
-    } else {
-      // check distance change to avoid infinite loop
-      if (distance) {
-        setDistance(undefined);
+        return Math.sqrt(diffX * diffX + diffY * diffY);
       }
     }
+
+    return undefined;
   }
+
+  const distance = calcDistance();
 
   return (
     <div ref={ref} className={styles.component}>
       <span className={styles.number}>{props.number}</span>
-      {distance && <span className={styles.distance}>{distance}</span>}
+      {distance && (
+        <span className={styles.distance}>{distance.toFixed(2)}</span>
+      )}
     </div>
   );
 }
