@@ -5,22 +5,25 @@ import { Blocks } from "./Blocks";
 import styles from "./Space.module.css";
 import { FreePiece } from "./FreePiece";
 import { Rect } from "./lib/types";
+import { center, distance, sameRect } from "./lib/functions";
 
-function minIndex(arr: (number | undefined)[]): number {
+function minIndex(dragRect: Rect, arr: (Rect | undefined)[]): number {
   let minIndex = 0;
   let minDistance: number | undefined = undefined;
 
   for (let index = 0; index < arr.length; index++) {
-    const distance = arr[index];
+    const rect = arr[index];
+    const dist = rect ? distance(center(dragRect), center(rect)) : undefined;
+
     if (minDistance) {
-      if (distance && distance < minDistance) {
+      if (dist && dist < minDistance) {
         minIndex = index;
-        minDistance = distance;
+        minDistance = dist;
       }
     } else {
-      if (distance) {
+      if (dist) {
         minIndex = index;
-        minDistance = distance;
+        minDistance = dist;
       }
     }
   }
@@ -29,7 +32,7 @@ function minIndex(arr: (number | undefined)[]): number {
 
 export function Space() {
   const [dragRect, setDragRect] = useState<Rect | undefined>(undefined);
-  const [blockDistances, setBlockDistances] = useState<(number | undefined)[]>([
+  const [blocks, setBlocks] = useState<(Rect | undefined)[]>([
     undefined, //1
     undefined, //2
     undefined, //3
@@ -45,15 +48,20 @@ export function Space() {
     setDragRect(rect);
   }
 
-  function onOverlap(n: number, distance: number) {
-    if (blockDistances[n] !== distance) {
-      const updated = [...blockDistances];
-      updated[n] = distance;
-      setBlockDistances(updated);
+  function onOverlap(n: number, rect: Rect) {
+    if (blocks[n] && sameRect(blocks[n], rect)) {
+      return;
     }
+
+    const updated = [...blocks];
+    updated[n] = rect;
+    setBlocks(updated);
   }
 
-  const minBlockIndex = minIndex(blockDistances);
+  const minBlockIndex = dragRect ? minIndex(dragRect, blocks) : 0;
+  const targetRect = minBlockIndex
+    ? blocks[minBlockIndex - 1]
+    : undefined;
 
   return (
     <div className={styles.component}>
@@ -62,10 +70,7 @@ export function Space() {
         onOverlap={onOverlap}
         closestBlockNum={minBlockIndex}
       />
-      <FreePiece
-        onDrag={onDrag}
-        targetPos={{ x: 647.7272338867188, y: 497.272705078125 }}
-      />
+      <FreePiece onDrag={onDrag} targetRect={targetRect} />
     </div>
   );
 }

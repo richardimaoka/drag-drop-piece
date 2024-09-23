@@ -4,7 +4,7 @@ import { Rect } from "./lib/types";
 
 type Props = {
   draggedRect?: Rect;
-  onOverlap?: (n: number, distance: number) => void;
+  onOverlap?: (n: number, rect: Rect) => void;
   closestBlockNum?: number;
 };
 

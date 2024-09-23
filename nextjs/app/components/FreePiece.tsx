@@ -16,7 +16,7 @@ type Props = {
   // onDragStart?: (dragRect: Rect) => void;
   onDrag?: (dragRect: Rect) => void;
   onDragEnd?: (dragRect: Rect) => void;
-  targetPos?: Position;
+  targetRect?: Rect;
 };
 
 export function FreePiece(props: Props) {
@@ -63,8 +63,8 @@ export function FreePiece(props: Props) {
       const diffX = e.clientX - drag.startX;
       const diffY = e.clientY - drag.startY;
 
-      if (props.targetPos) {
-        setPos({ x: props.targetPos.x, y: props.targetPos.y });
+      if (props.targetRect) {
+        setPos({ x: props.targetRect.x1, y: props.targetRect.y1 });
       } else {
         setPos({ x: pos.x + diffX, y: pos.y + diffY });
       }

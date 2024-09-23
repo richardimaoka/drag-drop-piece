@@ -6,19 +6,27 @@ import { center, distance, isOverlapped, toRect } from "./lib/functions";
 type Props = {
   number: number;
   draggedRect?: Rect;
-  onOverlap?: (n: number, distance: number) => void;
+  onOverlap?: (n: number, rect: Rect) => void;
   isClosest?: boolean;
+};
+
+type Overlap = {
+  blockRect: Rect;
+  distance: number;
 };
 
 export function Block(props: Props) {
   const ref = useRef<HTMLDivElement>(null);
 
-  function calcDistance(): number | undefined {
+  function calcOverlap(): Overlap | undefined {
     if (ref.current && props.draggedRect) {
       const blockRect = toRect(ref.current.getBoundingClientRect());
 
       if (isOverlapped(blockRect, props.draggedRect)) {
-        return distance(center(blockRect), center(props.draggedRect));
+        return {
+          blockRect: blockRect,
+          distance: distance(center(blockRect), center(props.draggedRect)),
+        };
       }
     }
 
@@ -26,15 +34,15 @@ export function Block(props: Props) {
     return undefined;
   }
 
-  const dist = calcDistance();
+  const overlap = calcOverlap();
 
   // useEffect to avoid the following error:
   //   `Cannot update a component while rendering a different component`
   useEffect(() => {
-    if (dist && props.onOverlap) {
-      props.onOverlap(props.number, dist);
+    if (overlap && props.onOverlap) {
+      props.onOverlap(props.number, overlap.blockRect);
     }
-  }, [dist, props]);
+  }, [overlap, props]);
 
   return (
     <div
@@ -43,13 +51,15 @@ export function Block(props: Props) {
         styles.component +
         (props.isClosest
           ? " " + styles.closest
-          : dist
+          : overlap
           ? " " + styles.overlapped
           : "")
       }
     >
       <span className={styles.number}>{props.number}</span>
-      {dist && <span className={styles.distance}>{dist.toFixed(2)}</span>}
+      {overlap && (
+        <span className={styles.distance}>{overlap.distance.toFixed(2)}</span>
+      )}
     </div>
   );
 }
