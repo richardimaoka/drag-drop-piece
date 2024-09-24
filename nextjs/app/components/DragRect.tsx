@@ -175,7 +175,7 @@ export function DragRect(props: Props) {
       }
       onTransitionEnd={onAnimationEnd}
     >
-      free
+      ピース
     </div>
   );
 }

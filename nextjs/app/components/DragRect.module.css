@@ -8,8 +8,12 @@
   align-items: center;
   justify-items: center;
 
-  border: solid 1px black;
-  background-color: white;
+  /* border: solid 1px black; */
+  background-color: rgb(82, 102, 211);
+
+  font-size: 2rem;
+  font-weight: 700;
+  color: white;
 }
 
 .animate {
